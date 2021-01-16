@@ -5,22 +5,32 @@ import java.sql.*;
 public class DAO {
 
     private Connection connection;
-    private final String URL = "jdbc:mysql://localhost:3306/stucombus?serverTimezone=UTC";
-    private final String USER = "root";
-    private final String PASSWORD = "Epsa2014!";
 
     public DAO() {
         connect();
     }
 
-    private void connect() {
+    public void connect() {
         try {
+            String URL = "jdbc:mysql://localhost:3306/stucombus?serverTimezone=UTC";
+            String USER = "root";
+            String PASSWORD = "Epsa2014!";
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            if (!connection.isValid(1000)) connection = null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public void disconnect() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void insertNewDriver(String dni, String name, String surname) {
         try {
@@ -35,7 +45,7 @@ public class DAO {
 
     public void insertNewVehicle(int tuition, int seating) {
         try {
-            String query = "INSERT INTO autobus (matricula, asientos) VALUES (" + tuition +", "+ seating + ")";
+            String query = "INSERT INTO autobus (matricula, asientos) VALUES (" + tuition + ", " + seating + ")";
             Statement statement = connection.createStatement();
             statement.execute(query);
             System.out.println("Vehicle registered: ");
