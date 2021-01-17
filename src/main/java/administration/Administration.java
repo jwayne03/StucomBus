@@ -6,7 +6,7 @@ import model.Driver;
 import utils.Printer;
 import worker.Worker;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Administration {
@@ -21,12 +21,16 @@ public class Administration {
     private Driver driver;
 
     public Administration() {
-        printer = new Printer();
-        worker = new Worker();
-        driver = new Driver();
-        drivers = new ArrayList<>();
-        buses = new ArrayList<>();
-        dao = new DAO();
+        try {
+            dao = new DAO();
+            printer = new Printer();
+            worker = new Worker();
+            driver = new Driver();
+            drivers = dao.selectAllDrivers();
+            buses = dao.selectAllBuses();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
@@ -72,10 +76,16 @@ public class Administration {
     }
 
     private void unsubscribeDriver() {
+        for (Driver driver : drivers) {
+            System.out.println(driver.toString());
+        }
+        String dni = worker.askString("What driver do you want to unsubscribe? \n " +
+                "To delete you need to choose the dni");
+        dao.deleteDriver(dni);
     }
 
     private void vehicleRegistration() {
-        int tuition = worker.askInt("Introduce the tuition of your vehicle: ");
+        String tuition = worker.askString("Introduce the tuition of your vehicle: ");
         int seating = worker.askInt("Introduce how many seats have your bus");
 
         buses.add(new Bus(tuition, seating));
@@ -83,10 +93,24 @@ public class Administration {
     }
 
     private void unsubscribeVehicle() {
+        for (Bus bus : buses) {
+            System.out.println(bus.toString());
+        }
+
+        String tuition = worker.askString("What vehicle do you want unsubscribe? \n" +
+                "To delete you need to introduce the tuition");
+        dao.deleteVehicle(tuition);
     }
 
     private void routeRegistration() {
-
+        System.out.println("Register a new Route: ");
+        int id_route = worker.askInt("Introduce the id of your route");
+        String tuition = worker.askString("Introduce the tuition of the vehicle");
+        String driverDNI = worker.askString("Introduce the DNI of the driver");
+        String departure = worker.askString("Introduce the date of departure");
+        String arrive = worker.askString("Introduce the date of arrive");
+        int origin = worker.askInt("Introduce your city origin");
+        int destiny = worker.askInt("Introduce the city of destination");
     }
 
     private void unsubscribeExistingRoute() {

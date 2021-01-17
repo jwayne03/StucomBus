@@ -2,19 +2,23 @@ package model;
 
 public class Bus {
 
-    private int tuition;
+    private String tuition;
     private int seating;
 
-    public Bus(int tuition, int seating) {
+    public Bus() {
+
+    }
+
+    public Bus(String tuition, int seating) {
         this.tuition = tuition;
         this.seating = seating;
     }
 
-    public int getTuition() {
+    public String getTuition() {
         return tuition;
     }
 
-    public void setTuition(int tuition) {
+    public void setTuition(String tuition) {
         this.tuition = tuition;
     }
 
@@ -24,5 +28,11 @@ public class Bus {
 
     public void setSeating(int seating) {
         this.seating = seating;
+    }
+
+    @Override
+    public String toString() {
+        return "Tuition: " + tuition +
+                " Seating=" + seating + "\n";
     }
 }

@@ -9,6 +9,7 @@ public class Driver {
     public Driver() {
 
     }
+
     public Driver(String dni, String name, String surname) {
         this.dni = dni;
         this.name = name;
@@ -37,5 +38,13 @@ public class Driver {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public String toString() {
+        return "Dni: " + dni +
+                " \nName: " + name +
+                " \nSurname: " + surname
+                + "\n";
     }
 }
