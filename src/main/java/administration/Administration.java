@@ -3,6 +3,7 @@ package administration;
 import dao.DAO;
 import model.Bus;
 import model.Driver;
+import model.Route;
 import utils.Printer;
 import worker.Worker;
 
@@ -17,6 +18,7 @@ public class Administration {
 
     private List<Driver> drivers;
     private List<Bus> buses;
+    private List<Route> routes;
 
     private Driver driver;
 
@@ -28,6 +30,7 @@ public class Administration {
             driver = new Driver();
             drivers = dao.selectAllDrivers();
             buses = dao.selectAllBuses();
+            routes = dao.selectAllRoutes();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,11 +79,24 @@ public class Administration {
     }
 
     private void unsubscribeDriver() {
-        for (Driver driver : drivers) {
-            System.out.println(driver.toString());
-        }
+        drivers.forEach(driver1 -> {
+            System.out.println(driver1.toString());
+        });
+
         String dni = worker.askString("What driver do you want to unsubscribe? \n " +
                 "To delete you need to choose the dni");
+
+        drivers.forEach(driver1 -> {
+            routes.forEach(route -> {
+                if (dni.equals(driver1.getDni())) {
+                    if (driver1.getDni().equals(route.getDni())) {
+                        printer.cantDeleteThisDriver();
+                    }
+                } else {
+                    printer.driverDontExistInTheSystem();
+                }
+            });
+        });
         dao.deleteDriver(dni);
     }
 
@@ -93,9 +109,9 @@ public class Administration {
     }
 
     private void unsubscribeVehicle() {
-        for (Bus bus : buses) {
+        buses.forEach(bus -> {
             System.out.println(bus.toString());
-        }
+        });
 
         String tuition = worker.askString("What vehicle do you want unsubscribe? \n" +
                 "To delete you need to introduce the tuition");
@@ -111,13 +127,22 @@ public class Administration {
         String arrive = worker.askString("Introduce the date of arrive");
         int origin = worker.askInt("Introduce your city origin");
         int destiny = worker.askInt("Introduce the city of destination");
+
+        dao.insertNewRoute(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
     }
 
     private void unsubscribeExistingRoute() {
+        routes.forEach(route -> {
+            System.out.println(route.toString());
+        });
+
+        int route_id = worker.askInt("What route do you want to delete?");
+        dao.deleteExistentRoute(route_id);
     }
 
     private void showListRoutes() {
-
+        routes.forEach(route -> {
+            System.out.println(route.toString());
+        });
     }
-
 }

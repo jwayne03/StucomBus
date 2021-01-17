@@ -82,14 +82,12 @@ public class Route {
 
     @Override
     public String toString() {
-        return "Route{" +
-                "route_id=" + route_id +
-                ", tuition='" + tuition + '\'' +
-                ", dni=" + dni +
-                ", origin=" + origin +
-                ", destination=" + destination +
-                ", departure='" + departure + '\'' +
-                ", arrive='" + arrive + '\'' +
-                '}';
+        return "route_id: " + route_id +
+                " tuition: " + tuition +
+                " dni: " + dni +
+                " origin: " + origin +
+                " destination: " + destination +
+                " departure: " + departure +
+                " arrive: " + arrive  + "\n";
     }
 }

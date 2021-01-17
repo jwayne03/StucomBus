@@ -29,4 +29,23 @@ public class Printer {
     public void needToIntroduceAnOption() {
         System.out.println("You need to introduce an option");
     }
+
+    public void routeRegisteredSuccessfully(int route_id, String tuition, String dni, int origin, int destination, String departure, String arrive) {
+        System.out.println("New route registered successfully");
+        System.out.println("route id: " + route_id);
+        System.out.println("tuition: " + tuition);
+        System.out.println("DNI: " + dni);
+        System.out.println("origin: " + origin);
+        System.out.println("destination: " + destination);
+        System.out.println("departure: " + departure);
+        System.out.println("arrive: " + arrive);
+    }
+
+    public void cantDeleteThisDriver() {
+        System.out.println("You can't delete this driver because have a route assigned");
+    }
+
+    public void driverDontExistInTheSystem() {
+        System.out.println("This driver doesn't exists in the system");
+    }
 }

@@ -3,6 +3,7 @@ package dao;
 import model.Bus;
 import model.Driver;
 import model.Route;
+import utils.Printer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,8 +16,10 @@ import java.util.List;
 public class DAO {
 
     private Connection connection;
+    private Printer printer;
 
     public DAO() {
+        printer = new Printer();
         connect();
     }
 
@@ -127,6 +130,20 @@ public class DAO {
         }
     }
 
+    public void insertNewRoute(int route_id, String tuition, String dni, int origin, int destination, String departure, String arrive) {
+        try {
+            String query = "INSERT INTO " +
+                    "ruta (idRuta, matricula, conductorDNI, fecha_salida, fecha_llegada, ciudad_origen, ciudad_destino) " +
+                    "VALUES(" + route_id + "," + tuition + "," + dni + "," + departure + "," + arrive + "," + origin + "," + destination + ")";
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            printer.routeRegisteredSuccessfully(route_id, tuition, dni, origin, destination, departure, arrive);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // ******************* DELETES *******************
 
     public void deleteDriver(String dni) {
@@ -143,6 +160,17 @@ public class DAO {
     public void deleteVehicle(String tuition) {
         try {
             String query = "DELETE FROM autobus WHERE matricula='" + tuition + "'";
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteExistentRoute(int route_id) {
+        try {
+            String query = "DELETE FROM ruta WHERE idRuta='" + route_id + "'";
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
             statement.close();
