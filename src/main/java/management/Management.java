@@ -27,7 +27,7 @@ public class Management {
                 break;
             case 3:
                 seePassengerRoute();
-                 break;
+                break;
             default:
                 printer.needToIntroduceAnOption();
                 break;

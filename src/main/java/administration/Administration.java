@@ -7,61 +7,49 @@ import model.Route;
 import utils.Printer;
 import worker.Worker;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class Administration {
 
-    private Printer printer;
-    private Worker worker;
-    private DAO dao;
-
-    private List<Driver> drivers;
-    private List<Bus> buses;
-    private List<Route> routes;
+    private final Printer printer;
+    private final Worker worker;
+    private final DAO dao;
 
     private Driver driver;
 
     public Administration() {
-        try {
-            dao = new DAO();
-            printer = new Printer();
-            worker = new Worker();
-            driver = new Driver();
-            drivers = dao.selectAllDrivers();
-            buses = dao.selectAllBuses();
-            routes = dao.selectAllRoutes();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao = new DAO();
+        printer = new Printer();
+        worker = new Worker();
+        driver = new Driver();
     }
 
-    public void run() {
+    public void run(List<Bus> buses, List<Driver> drivers, List<Route> routes) {
         printer.administrationmenu();
 
         int option = worker.askInt("Introduce an option: ");
 
         switch (option) {
             case 1:
-                driverRegistration();
+                driverRegistration(drivers);
                 break;
             case 2:
-                unsubscribeDriver();
+                unsubscribeDriver(drivers, routes);
                 break;
             case 3:
-                vehicleRegistration();
+                vehicleRegistration(buses);
                 break;
             case 4:
-                unsubscribeVehicle();
+                unsubscribeVehicle(buses);
                 break;
             case 5:
                 routeRegistration();
                 break;
             case 6:
-                unsubscribeExistingRoute();
+                unsubscribeExistingRoute(routes);
                 break;
             case 7:
-                showListRoutes();
+                showListRoutes(routes);
                 break;
             default:
                 printer.needToIntroduceAnOption();
@@ -69,7 +57,8 @@ public class Administration {
         }
     }
 
-    private void driverRegistration() {
+
+    private void driverRegistration(List<Driver> drivers) {
         String dni = worker.askString("Introduce your DNI: ");
         String name = worker.askString("Introduce your name: ");
         String surname = worker.askString("Introduce your surname: ");
@@ -78,10 +67,15 @@ public class Administration {
         dao.insertNewDriver(dni, name, surname);
     }
 
-    private void unsubscribeDriver() {
+    private void unsubscribeDriver(List<Driver> drivers, List<Route> routes) {
         drivers.forEach(driver1 -> {
             System.out.println(driver1.toString());
         });
+
+        if (drivers.isEmpty()) {
+            System.out.println("There are not drivers registered yet.");
+            return;
+        }
 
         String dni = worker.askString("What driver do you want to unsubscribe? \n " +
                 "To delete you need to choose the dni");
@@ -100,7 +94,7 @@ public class Administration {
         dao.deleteDriver(dni);
     }
 
-    private void vehicleRegistration() {
+    private void vehicleRegistration(List<Bus> buses) {
         String tuition = worker.askString("Introduce the tuition of your vehicle: ");
         int seating = worker.askInt("Introduce how many seats have your bus");
 
@@ -108,7 +102,7 @@ public class Administration {
         dao.insertNewVehicle(tuition, seating);
     }
 
-    private void unsubscribeVehicle() {
+    private void unsubscribeVehicle(List<Bus> buses) {
         buses.forEach(bus -> {
             System.out.println(bus.toString());
         });
@@ -131,7 +125,7 @@ public class Administration {
         dao.insertNewRoute(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
     }
 
-    private void unsubscribeExistingRoute() {
+    private void unsubscribeExistingRoute(List<Route> routes) {
         routes.forEach(route -> {
             System.out.println(route.toString());
         });
@@ -140,7 +134,7 @@ public class Administration {
         dao.deleteExistentRoute(route_id);
     }
 
-    private void showListRoutes() {
+    private void showListRoutes(List<Route> routes) {
         routes.forEach(route -> {
             System.out.println(route.toString());
         });

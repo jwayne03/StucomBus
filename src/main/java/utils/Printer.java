@@ -6,6 +6,7 @@ public class Printer {
         System.out.println("Hello to StucomBus, what do you want to do?");
         System.out.println("1 - Administration");
         System.out.println("2 - Management");
+        System.out.println("0 - Exit");
     }
 
     public void administrationmenu() {
@@ -47,5 +48,9 @@ public class Printer {
 
     public void driverDontExistInTheSystem() {
         System.out.println("This driver doesn't exists in the system");
+    }
+
+    public void userHasChooseToExit() {
+        System.out.println("You have chose exit, Good Bye!");
     }
 }

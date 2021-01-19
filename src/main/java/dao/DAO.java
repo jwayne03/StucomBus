@@ -16,7 +16,7 @@ import java.util.List;
 public class DAO {
 
     private Connection connection;
-    private Printer printer;
+    private final Printer printer;
 
     public DAO() {
         printer = new Printer();
@@ -46,60 +46,72 @@ public class DAO {
 
     // ******************* SELECTS *******************
 
-    public List<Driver> selectAllDrivers() throws SQLException {
-        String query = "SELECT * FROM conductor";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
+    public List<Driver> selectAllDrivers() {
         List<model.Driver> drivers = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM conductor";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-        while (resultSet.next()) {
-            model.Driver driver = new model.Driver();
-            driver.setDni(resultSet.getString("dni"));
-            driver.setName(resultSet.getString("nombre"));
-            driver.setSurname(resultSet.getString("apellido"));
-            drivers.add(driver);
+            while (resultSet.next()) {
+                model.Driver driver = new model.Driver();
+                driver.setDni(resultSet.getString("dni"));
+                driver.setName(resultSet.getString("nombre"));
+                driver.setSurname(resultSet.getString("apellido"));
+                drivers.add(driver);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        resultSet.close();
-        statement.close();
         return drivers;
     }
 
-    public List<Bus> selectAllBuses() throws SQLException {
-        String query = "SELECT * FROM autobus";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
+    public List<Bus> selectAllBuses() {
         List<Bus> buses = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM autobus";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-        while (resultSet.next()) {
-            Bus bus = new Bus();
-            bus.setTuition(resultSet.getString("matricula"));
-            bus.setSeating(resultSet.getInt("asientos"));
-            buses.add(bus);
+            while (resultSet.next()) {
+                Bus bus = new Bus();
+                bus.setTuition(resultSet.getString("matricula"));
+                bus.setSeating(resultSet.getInt("asientos"));
+                buses.add(bus);
+            }
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        statement.close();
-        resultSet.close();
         return buses;
     }
 
-    public List<Route> selectAllRoutes() throws SQLException {
-        String query = "SELECT * FROM ruta";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
+    public List<Route> selectAllRoutes() {
         List<Route> routes = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM ruta";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-        while (resultSet.next()) {
-            Route route = new Route();
-            route.setRoute_id(resultSet.getInt("idRuta"));
-            route.setTuition(resultSet.getString("matricula"));
-            route.setDni(resultSet.getString("conductorDNI"));
-            route.setDeparture(resultSet.getString("fecha_salida"));
-            route.setArrive(resultSet.getString("fecha_llegada"));
-            route.setOrigin(resultSet.getInt("ciudad_origen"));
-            route.setDestination(resultSet.getInt("ciudad_destino"));
-            routes.add(route);
+            while (resultSet.next()) {
+                Route route = new Route();
+                route.setRoute_id(resultSet.getInt("idRuta"));
+                route.setTuition(resultSet.getString("matricula"));
+                route.setDni(resultSet.getString("conductorDNI"));
+                route.setDeparture(resultSet.getString("fecha_salida"));
+                route.setArrive(resultSet.getString("fecha_llegada"));
+                route.setOrigin(resultSet.getInt("ciudad_origen"));
+                route.setDestination(resultSet.getInt("ciudad_destino"));
+                routes.add(route);
+            }
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        statement.close();
-        resultSet.close();
         return routes;
     }
 
