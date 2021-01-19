@@ -57,29 +57,32 @@ public class Administration {
         }
     }
 
-
     private void driverRegistration(List<Driver> drivers) {
         String dni = worker.askString("Introduce your DNI: ");
         String name = worker.askString("Introduce your name: ");
         String surname = worker.askString("Introduce your surname: ");
-
         drivers.add(new Driver(dni, name, surname));
         dao.insertNewDriver(dni, name, surname);
     }
 
     private void unsubscribeDriver(List<Driver> drivers, List<Route> routes) {
-        drivers.forEach(driver1 -> {
-            System.out.println(driver1.toString());
-        });
-
+        printAllDrivers(drivers);
         if (drivers.isEmpty()) {
             System.out.println("There are not drivers registered yet.");
             return;
         }
+        String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
+        searchDriver(drivers, routes, dni);
+        dao.deleteDriver(dni);
+    }
 
-        String dni = worker.askString("What driver do you want to unsubscribe? \n " +
-                "To delete you need to choose the dni");
+    private void printAllDrivers(List<Driver> drivers) {
+        drivers.forEach(driver1 -> {
+            System.out.println(driver1.toString());
+        });
+    }
 
+    private void searchDriver(List<Driver> drivers, List<Route> routes, String dni) {
         drivers.forEach(driver1 -> {
             routes.forEach(route -> {
                 if (dni.equals(driver1.getDni())) {
@@ -91,25 +94,26 @@ public class Administration {
                 }
             });
         });
-        dao.deleteDriver(dni);
     }
 
     private void vehicleRegistration(List<Bus> buses) {
         String tuition = worker.askString("Introduce the tuition of your vehicle: ");
         int seating = worker.askInt("Introduce how many seats have your bus");
-
         buses.add(new Bus(tuition, seating));
         dao.insertNewVehicle(tuition, seating);
     }
 
     private void unsubscribeVehicle(List<Bus> buses) {
-        buses.forEach(bus -> {
-            System.out.println(bus.toString());
-        });
-
+        printAllBuses(buses);
         String tuition = worker.askString("What vehicle do you want unsubscribe? \n" +
                 "To delete you need to introduce the tuition");
         dao.deleteVehicle(tuition);
+    }
+
+    private void printAllBuses(List<Bus> buses) {
+        buses.forEach(bus -> {
+            System.out.println(bus.toString());
+        });
     }
 
     private void routeRegistration() {
@@ -121,17 +125,19 @@ public class Administration {
         String arrive = worker.askString("Introduce the date of arrive");
         int origin = worker.askInt("Introduce your city origin");
         int destiny = worker.askInt("Introduce the city of destination");
-
         dao.insertNewRoute(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
     }
 
     private void unsubscribeExistingRoute(List<Route> routes) {
+        printAllRoutes(routes);
+        int route_id = worker.askInt("What route do you want to delete?");
+        dao.deleteExistentRoute(route_id);
+    }
+
+    private void printAllRoutes(List<Route> routes) {
         routes.forEach(route -> {
             System.out.println(route.toString());
         });
-
-        int route_id = worker.askInt("What route do you want to delete?");
-        dao.deleteExistentRoute(route_id);
     }
 
     private void showListRoutes(List<Route> routes) {
