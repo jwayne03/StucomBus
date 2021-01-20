@@ -83,11 +83,11 @@ public class Route {
     @Override
     public String toString() {
         return "route_id: " + route_id +
-                " tuition: " + tuition +
-                " dni: " + dni +
-                " origin: " + origin +
-                " destination: " + destination +
-                " departure: " + departure +
-                " arrive: " + arrive  + "\n";
+                " \ntuition: " + tuition +
+                " \ndni: " + dni +
+                " \norigin: " + origin +
+                " \ndestination: " + destination +
+                " \ndeparture: " + departure +
+                " \narrive: " + arrive  + "\n";
     }
 }

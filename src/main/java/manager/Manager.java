@@ -9,6 +9,7 @@ import model.Route;
 import utils.Printer;
 import worker.Worker;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Manager {
@@ -30,9 +31,17 @@ public class Manager {
         management = new Management();
         printer = new Printer();
         worker = new Worker();
-        drivers = dao.selectAllDrivers();
-        buses = dao.selectAllBuses();
-        routes = dao.selectAllRoutes();
+        init();
+    }
+
+    private void init() {
+        try {
+            drivers = dao.selectAllDrivers();
+            buses = dao.selectAllBuses();
+            routes = dao.selectAllRoutes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Manager getInstance() {
