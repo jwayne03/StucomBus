@@ -77,9 +77,14 @@ public class Administration {
             return;
         }
         String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
+        deleteDriverByPosition(drivers, dni);
         searchDriver(drivers, routes, dni);
-        drivers.stream().filter(driver1 -> dni.equals(driver1.getDni())).map(driver1 -> dni).forEach(drivers::remove);
         dao.deleteDriver(dni);
+        printer.driverRemovedSuccessfully();
+    }
+
+    private void deleteDriverByPosition(List<Driver> drivers, String dni) {
+        drivers.removeIf(driver -> driver.getDni().equals(dni));
     }
 
     private void printAllDrivers(List<Driver> drivers) {
@@ -95,12 +100,10 @@ public class Administration {
                     if (driver.getDni().equals(route.getDni())) {
                         printer.cantDeleteThisDriver();
                     } else {
-                        printer.driverRemovedSuccessfully();
+                        printer.driverDontExistInTheSystem();
                     }
-                } else {
-                    printer.driverDontExistInTheSystem();
+                    return;
                 }
-                return;
             }
         }
     }

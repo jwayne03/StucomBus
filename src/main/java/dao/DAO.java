@@ -15,10 +15,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static constants.Credentials.PASSWORD;
-import static constants.Credentials.URL;
-import static constants.Credentials.USER;
-
 public class DAO {
 
     private Connection connection;
@@ -31,9 +27,12 @@ public class DAO {
 
     public void connect() {
         try {
+            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
+            String USER = "root";
+            String PASSWORD = "root";
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            System.out.println("The connection to the database is failed.");
+            e.printStackTrace();
         }
     }
 
@@ -80,7 +79,6 @@ public class DAO {
 
     public List<Route> selectAllRoutes() throws SQLException {
         List<Route> routes = new ArrayList<>();
-
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_ROUTES)) {
                 while (resultSet.next()) {
