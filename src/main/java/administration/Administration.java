@@ -79,6 +79,8 @@ public class Administration {
         String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
         searchDriver(drivers, routes, dni);
         dao.deleteDriver(dni);
+
+        drivers.stream().filter(driver1 -> dni.equals(driver1.getDni())).map(driver1 -> dni).forEach(drivers::remove);
     }
 
     private void printAllDrivers(List<Driver> drivers) {
