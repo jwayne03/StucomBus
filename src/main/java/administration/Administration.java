@@ -78,9 +78,8 @@ public class Administration {
         }
         String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
         searchDriver(drivers, routes, dni);
-        dao.deleteDriver(dni);
-
         drivers.stream().filter(driver1 -> dni.equals(driver1.getDni())).map(driver1 -> dni).forEach(drivers::remove);
+        dao.deleteDriver(dni);
     }
 
     private void printAllDrivers(List<Driver> drivers) {
@@ -90,13 +89,20 @@ public class Administration {
     }
 
     private void searchDriver(List<Driver> drivers, List<Route> routes, String dni) {
-        drivers.forEach(driver1 -> {
-            routes.forEach(route -> {
-                if (dni.equals(driver1.getDni())) {
-                    if (driver1.getDni().equals(route.getDni())) printer.cantDeleteThisDriver();
-                } else printer.driverDontExistInTheSystem();
-            });
-        });
+        for (Driver driver : drivers) {
+            for (Route route : routes) {
+                if (dni.equals(driver.getDni())) {
+                    if (driver.getDni().equals(route.getDni())) {
+                        printer.cantDeleteThisDriver();
+                    } else {
+                        printer.driverRemovedSuccessfully();
+                    }
+                } else {
+                    printer.driverDontExistInTheSystem();
+                }
+                return;
+            }
+        }
     }
 
     private void vehicleRegistration(List<Bus> buses) throws SQLException {

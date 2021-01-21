@@ -53,4 +53,8 @@ public class Printer {
     public void userHasChooseToExit() {
         System.out.println("You have chose exit, Good Bye!");
     }
+
+    public void driverRemovedSuccessfully() {
+        System.out.println("This driver has been removed successfully");
+    }
 }
