@@ -145,7 +145,17 @@ public class Administration {
     private void unsubscribeExistingRoute(List<Route> routes) throws SQLException {
         printAllRoutes(routes);
         int route_id = worker.askInt("What route do you want to delete?");
+        checkExistingRoute(routes, route_id);
         dao.deleteExistentRoute(route_id);
+    }
+
+    private void checkExistingRoute(List<Route> routes, int route_id) {
+        for (Route route: routes) {
+            if (route.getRoute_id() != route_id) {
+                printer.thereAreNotExistingRoutes();
+            }
+            return;
+        }
     }
 
     private void printAllRoutes(List<Route> routes) {

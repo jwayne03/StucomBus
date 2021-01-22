@@ -57,4 +57,8 @@ public class Printer {
     public void driverRemovedSuccessfully() {
         System.out.println("This driver has been removed successfully");
     }
+
+    public void thereAreNotExistingRoutes() {
+        System.out.println("There are not existing routes in the database.");
+    }
 }
