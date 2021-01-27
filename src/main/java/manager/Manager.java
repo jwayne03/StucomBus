@@ -5,6 +5,7 @@ import dao.DAO;
 import management.Management;
 import model.Bus;
 import model.Driver;
+import model.Passenger;
 import model.Route;
 import utils.Printer;
 import worker.Worker;
@@ -22,6 +23,7 @@ public class Manager {
     private final Worker worker;
 
     private List<Driver> drivers;
+    private List<Passenger> passengers;
     private List<Bus> buses;
     private List<Route> routes;
 
@@ -37,6 +39,7 @@ public class Manager {
     private void init() {
         try {
             drivers = dao.selectAllDrivers();
+            passengers = dao.selectAllPassengers();
             buses = dao.selectAllBuses();
             routes = dao.selectAllRoutes();
         } catch (SQLException e) {
@@ -46,22 +49,21 @@ public class Manager {
 
     public static Manager getInstance() {
         if (manager == null) manager = new Manager();
-        return manager;
+        return manager ;
     }
 
     public void run() {
-        printer.welcome();
-
-        int option = worker.askInt("Introduce an option:");
-
         boolean exit = false;
+
         while (!exit) {
-            switch (option) {
+            printer.welcome();
+
+            switch (worker.askInt("Introduce an option")) {
                 case 1:
                     administration.run(buses, drivers, routes);
                     break;
                 case 2:
-                    management.run();
+                    management.run(passengers);
                     break;
                 case 0:
                     printer.userHasChooseToExit();

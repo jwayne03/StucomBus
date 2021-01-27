@@ -1,7 +1,9 @@
 package dao;
 
+
 import model.Bus;
 import model.Driver;
+import model.Passenger;
 import model.Route;
 import query.Query;
 import utils.Printer;
@@ -29,7 +31,7 @@ public class DAO {
         try {
             String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
             String USER = "root";
-            String PASSWORD = "root";
+            String PASSWORD = "Epsa2014!";
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,6 +62,22 @@ public class DAO {
             }
         }
         return drivers;
+    }
+
+    public List<Passenger> selectAllPassengers() throws SQLException {
+        List<Passenger> passengers = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_PASSENGERS)) {
+                while (resultSet.next()) {
+                    Passenger passenger = new Passenger();
+                    passenger.setDni(resultSet.getString("dni"));
+                    passenger.setName(resultSet.getString("nombre"));
+                    passenger.setSurname(resultSet.getString("apellido"));
+                    passengers.add(passenger);
+                }
+            }
+        }
+        return passengers;
     }
 
     public List<Bus> selectAllBuses() throws SQLException {
@@ -108,7 +126,7 @@ public class DAO {
             preparedStatement.setString(3, surname);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            System.out.println("Element created " + name + " " + surname + " " + dni);
+            printer.driverCreated(name, surname, dni);
         }
         this.disconnect();
     }
@@ -139,6 +157,17 @@ public class DAO {
             preparedStatement.setString(7, arrive);
             preparedStatement.executeUpdate();
             printer.routeRegisteredSuccessfully(route_id, tuition, dni, origin, destination, departure, arrive);
+        }
+        this.disconnect();
+    }
+
+    public void insertNewPassenger(String dni, String name, String surname) throws SQLException {
+        this.connect();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_INTO_PASSENGER)) {
+            preparedStatement.setString(1, dni);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, surname);
+            printer.passengerCreated(name);
         }
         this.disconnect();
     }

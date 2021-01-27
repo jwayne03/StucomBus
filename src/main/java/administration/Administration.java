@@ -29,9 +29,7 @@ public class Administration {
         printer.administrationmenu();
 
         try {
-            int option = worker.askInt("Introduce an option: ");
-
-            switch (option) {
+            switch (worker.askInt("Introduce an option: ")) {
                 case 1:
                     driverRegistration(drivers);
                     break;
@@ -66,8 +64,27 @@ public class Administration {
         String dni = worker.askString("Introduce your DNI: ");
         String name = worker.askString("Introduce your name: ");
         String surname = worker.askString("Introduce your surname: ");
+        isDriverExists(drivers, dni);
+
         drivers.add(new Driver(dni, name, surname));
         dao.insertNewDriver(dni, name, surname);
+    }
+
+    private void isDriverExists(List<Driver> drivers, String dni) {
+        if (checkDriverIfExist(dni,drivers)) {
+            printer.thisDriverAlreadyExist();
+        } else {
+            printer.driverHasCreateSuccessfully();
+        }
+    }
+
+    private boolean checkDriverIfExist(String dni, List<Driver> drivers) {
+        for (Driver driver: drivers) {
+            if (driver.getDni().equals(dni)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void unsubscribeDriver(List<Driver> drivers, List<Route> routes) throws SQLException {
@@ -77,6 +94,10 @@ public class Administration {
             return;
         }
         String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
+        if (!checkDriverIfExist(dni, drivers)) {
+            printer.thisDriverNoExists();
+            return;
+        }
         deleteDriverByPosition(drivers, dni);
         searchDriver(drivers, routes, dni);
         dao.deleteDriver(dni);
@@ -117,6 +138,10 @@ public class Administration {
 
     private void unsubscribeVehicle(List<Bus> buses) throws SQLException {
         printAllBuses(buses);
+        if (buses.isEmpty()) {
+            printer.thereAreNotVehiclesRegisterYet();
+            return;
+        }
         String tuition = worker.askString("What vehicle do you want unsubscribe? \n" +
                 "To delete you need to introduce the tuition");
         dao.deleteVehicle(tuition);
@@ -144,6 +169,10 @@ public class Administration {
 
     private void unsubscribeExistingRoute(List<Route> routes) throws SQLException {
         printAllRoutes(routes);
+        if (routes.isEmpty()) {
+            printer.thereAreNoRoutes();
+            return;
+        }
         int route_id = worker.askInt("What route do you want to delete?");
         checkExistingRoute(routes, route_id);
         dao.deleteExistentRoute(route_id);

@@ -61,4 +61,32 @@ public class Printer {
     public void thereAreNotExistingRoutes() {
         System.out.println("There are not existing routes in the database.");
     }
+
+    public void thisDriverAlreadyExist() {
+        System.out.println("This driver already exist, please try to create a new driver.");
+    }
+
+    public void driverHasCreateSuccessfully() {
+        System.out.println("The driver has been created successfully");
+    }
+
+    public void thereAreNotVehiclesRegisterYet() {
+        System.out.println("There are not vehicles registered.");
+    }
+
+    public void thereAreNoRoutes() {
+        System.out.println("There are not routes registered.");
+    }
+
+    public void thisDriverNoExists() {
+        System.out.println("This driver doesn't exist");
+    }
+
+    public void driverCreated(String name, String surname, String dni) {
+        System.out.println("Element created " + name + " " + surname + " " + dni);
+    }
+
+    public void passengerCreated(String name) {
+        System.out.println(name + " has been created successfully");
+    }
 }
