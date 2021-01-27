@@ -63,7 +63,7 @@ public class Manager {
                     administration.run(buses, drivers, routes);
                     break;
                 case 2:
-                    management.run(passengers);
+                    management.run(routes,passengers);
                     break;
                 case 0:
                     printer.userHasChooseToExit();

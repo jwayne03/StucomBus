@@ -71,7 +71,7 @@ public class Administration {
     }
 
     private void isDriverExists(List<Driver> drivers, String dni) {
-        if (checkDriverIfExist(dni,drivers)) {
+        if (checkDriverIfExist(dni, drivers)) {
             printer.thisDriverAlreadyExist();
         } else {
             printer.driverHasCreateSuccessfully();
@@ -79,7 +79,7 @@ public class Administration {
     }
 
     private boolean checkDriverIfExist(String dni, List<Driver> drivers) {
-        for (Driver driver: drivers) {
+        for (Driver driver : drivers) {
             if (driver.getDni().equals(dni)) {
                 return true;
             }
@@ -179,7 +179,7 @@ public class Administration {
     }
 
     private void checkExistingRoute(List<Route> routes, int route_id) {
-        for (Route route: routes) {
+        for (Route route : routes) {
             if (route.getRoute_id() != route_id) {
                 printer.thereAreNotExistingRoutes();
             }

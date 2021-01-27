@@ -2,6 +2,7 @@ package management;
 
 import dao.DAO;
 import model.Passenger;
+import model.Route;
 import utils.Printer;
 import worker.Worker;
 
@@ -10,8 +11,8 @@ import java.util.List;
 
 public class Management {
 
-    private Printer printer;
-    private Worker worker;
+    private final Printer printer;
+    private final Worker worker;
     private final DAO dao;
 
     public Management() {
@@ -20,7 +21,7 @@ public class Management {
         worker = new Worker();
     }
 
-    public void run(List<Passenger> passengers) {
+    public void run(List<Route> routes, List<Passenger> passengers) {
         printer.managementmenu();
 
         try {
@@ -29,7 +30,7 @@ public class Management {
                     assignRoutePassenger(passengers);
                     break;
                 case 2:
-                    deletePassengerRoute();
+                    deletePassengerRoute(routes, passengers);
                     break;
                 case 3:
                     seePassengerRoute();
@@ -47,27 +48,35 @@ public class Management {
         String dni = worker.askString("Introduce your DNI: ");
         String name = worker.askString("Introduce your name: ");
         String surname = worker.askString("Introduce your surname");
+        createNewPassenger(passengers, dni, name, surname);
+    }
 
+    private void createNewPassenger(List<Passenger> passengers, String dni, String name, String surname) throws SQLException {
         if (ifDniExist(dni, passengers)) {
             System.out.println("This dni already exists, please try again.");
+        } else {
+            passengers.add(new Passenger(dni, name, surname));
+            dao.insertNewPassenger(dni, name, surname);
         }
-
-        // TODO: control don't create or insert to the database if the dni is wrong
-        passengers.add(new Passenger(dni, name, surname));
-        dao.insertNewPassenger(dni, name, surname);
     }
 
     private boolean ifDniExist(String dni, List<Passenger> passengers) {
         for (Passenger passenger : passengers) {
-            if (dni.equals(passenger.getDni())) {
-                return true;
-            }
+            if (dni.equals(passenger.getDni())) return true;
         }
         return false;
     }
 
-    private void deletePassengerRoute() {
+    private void deletePassengerRoute(List<Route> routes, List<Passenger> passengers) {
+        showPassengerRoutes(routes, passengers);
+    }
 
+    private void showPassengerRoutes(List<Route> routes, List<Passenger> passengers) {
+        passengers.forEach(passenger -> {
+            routes.forEach(route -> {
+                System.out.println(passenger.getName() + " " + route.getRoute_id());
+            });
+        });
     }
 
     private void seePassengerRoute() {

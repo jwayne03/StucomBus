@@ -18,9 +18,7 @@ public class Worker {
             try {
                 System.out.println(message);
                 answer = read.readLine();
-                if (answer.equals("")) {
-                    System.out.println("You must write something");
-                }
+                if (answer.equals("")) System.out.println("You must write something");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,7 +53,6 @@ public class Worker {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         } while (answer.equals(""));
         return answer;
     }
@@ -74,9 +71,7 @@ public class Worker {
 
     private boolean wordIsOk(String word, ArrayList<String> wordsAccepted) {
         for (String w : wordsAccepted) {
-            if (w.equalsIgnoreCase(word)) {
-                return true;
-            }
+            if (w.equalsIgnoreCase(word)) return true;
         }
         return false;
     }

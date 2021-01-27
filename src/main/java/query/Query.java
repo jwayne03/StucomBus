@@ -14,7 +14,7 @@ public class Query {
     public static final String INSERT_INTO_CONDUCTOR = "INSERT INTO conductor (dni, nombre, apellido) VALUES (?,?,?)";
     public static final String INSERT_INTO_BUS = "INSERT INTO autobus (matricula, asientos) VALUES (?,?)";
     public static final String INSERT_INTO_ROUTE = "INSERT INTO ruta (idRuta, matricula, conductorDNI, fecha_salida, fecha_llegada, ciudad_origen, ciudad_destino) VALUES(?,?,?,?,?,?,?)";
-    public static final String INSERT_INTO_PASSENGER = "INSERT INTO pasajero (dni, nombre, apellido) VALUES (?,?)";
+    public static final String INSERT_INTO_PASSENGER = "INSERT INTO pasajero (dni, nombre, apellido) VALUES (?,?,?)";
 
     // DELETES
 

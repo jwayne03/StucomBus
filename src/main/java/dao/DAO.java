@@ -167,6 +167,7 @@ public class DAO {
             preparedStatement.setString(1, dni);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, surname);
+            preparedStatement.executeUpdate();
             printer.passengerCreated(name);
         }
         this.disconnect();

@@ -39,4 +39,12 @@ public class Passenger {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    @Override
+    public String toString() {
+        return "DNI: " + dni +
+                "\nName: " + name +
+                "\nSurname: " + surname
+                + "\n";
+    }
 }
