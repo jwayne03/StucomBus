@@ -4,6 +4,7 @@ import administration.Administration;
 import dao.DAO;
 import management.Management;
 import model.Bus;
+import model.City;
 import model.Driver;
 import model.Passenger;
 import model.Route;
@@ -18,30 +19,32 @@ public class Manager {
     private DAO dao;
     private Administration administration;
     private Management management;
+    private Printer printer;
+    private Worker worker;
     private static Manager manager;
-    private final Printer printer;
-    private final Worker worker;
 
     private List<Driver> drivers;
     private List<Passenger> passengers;
     private List<Bus> buses;
     private List<Route> routes;
+    private List<City> cities;
 
     public Manager() {
-        dao = new DAO();
-        administration = new Administration();
-        management = new Management();
-        printer = new Printer();
-        worker = new Worker();
-        init();
+        this.dao = new DAO();
+        this.administration = new Administration();
+        this.management = new Management();
+        this.printer = new Printer();
+        this.worker = new Worker();
+        this.init();
     }
 
     private void init() {
         try {
-            drivers = dao.selectAllDrivers();
-            passengers = dao.selectAllPassengers();
-            buses = dao.selectAllBuses();
-            routes = dao.selectAllRoutes();
+            this.drivers = dao.selectAllDrivers();
+            this.passengers = dao.selectAllPassengers();
+            this.buses = dao.selectAllBuses();
+            this.routes = dao.selectAllRoutes();
+            this.cities = dao.selectAllCities();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,10 +52,10 @@ public class Manager {
 
     public static Manager getInstance() {
         if (manager == null) manager = new Manager();
-        return manager ;
+        return manager;
     }
 
-    public void run() {
+    public void execute() {
         boolean exit = false;
 
         while (!exit) {
@@ -60,10 +63,10 @@ public class Manager {
 
             switch (worker.askInt("Introduce an option")) {
                 case 1:
-                    administration.run(buses, drivers, routes);
+                    this.administration.execute(cities,buses, drivers, routes);
                     break;
                 case 2:
-                    management.run(routes,passengers);
+                    this.management.execute(routes, passengers);
                     break;
                 case 0:
                     printer.userHasChooseToExit();

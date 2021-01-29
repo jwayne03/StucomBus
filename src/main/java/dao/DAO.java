@@ -1,11 +1,9 @@
 package dao;
 
-
-import model.Bus;
-import model.Driver;
-import model.Passenger;
-import model.Route;
+import exception.DatabaseException;
+import model.*;
 import query.Query;
+import utils.DatabaseConnector;
 import utils.Printer;
 
 import java.sql.Connection;
@@ -17,27 +15,33 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DAO {
+public class DAO implements DatabaseConnector {
 
     private Connection connection;
-    private final Printer printer;
+    private Printer printer;
 
     public DAO() {
-        printer = new Printer();
-        connect();
-    }
-
-    public void connect() {
         try {
-            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
-            String USER = "root";
-            String PASSWORD = "Epsa2014!";
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            this.printer = new Printer();
+            this.connect();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void connect() throws DatabaseException {
+        try {
+            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
+            String USER = "root";
+            String PASSWORD = "Epsa2014!";
+            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            throw new DatabaseException("DATABASE ERROR CONECTION");
+        }
+    }
+
+    @Override
     public void disconnect() {
         try {
             if (connection != null) connection.close();
@@ -49,6 +53,7 @@ public class DAO {
     // ******************* SELECTS *******************
 
     public List<Driver> selectAllDrivers() throws SQLException {
+        this.connect();
         List<model.Driver> drivers = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_DRIVERS)) {
@@ -61,10 +66,12 @@ public class DAO {
                 }
             }
         }
+        this.disconnect();
         return drivers;
     }
 
     public List<Passenger> selectAllPassengers() throws SQLException {
+        this.connect();
         List<Passenger> passengers = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_PASSENGERS)) {
@@ -77,10 +84,12 @@ public class DAO {
                 }
             }
         }
+        this.disconnect();
         return passengers;
     }
 
     public List<Bus> selectAllBuses() throws SQLException {
+        this.connect();
         List<Bus> buses = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_BUSES)) {
@@ -92,10 +101,12 @@ public class DAO {
                 }
             }
         }
+        this.disconnect();
         return buses;
     }
 
     public List<Route> selectAllRoutes() throws SQLException {
+        this.connect();
         List<Route> routes = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_ROUTES)) {
@@ -114,6 +125,41 @@ public class DAO {
         }
         this.disconnect();
         return routes;
+    }
+
+    public List<Route> selectAllPassengerRoutes() throws SQLException {
+        this.connect();
+        List<Route> routes = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_PASSENGERROUTES)) {
+                while (resultSet.next()) {
+                    Route route = new Route();
+                    route.setRoute_id(resultSet.getInt("idRuta"));
+                    route.setDni(resultSet.getString("dni"));
+                    route.setPassengerRoute_id(resultSet.getInt("idPasajeroRuta"));
+                    routes.add(route);
+                }
+            }
+        }
+        this.disconnect();
+        return routes;
+    }
+
+    public List<City> selectAllCities() throws SQLException {
+        this.connect();
+        List<City> cities = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(Query.SELECT_ALL_CITIES)) {
+                while (resultSet.next()) {
+                    City city = new City();
+                    city.setCity_id(resultSet.getInt("id"));
+                    city.setName(resultSet.getString("nombre"));
+                    cities.add(city);
+                }
+            }
+        }
+        this.disconnect();
+        return cities;
     }
 
     // ******************* INSERTS *******************
@@ -156,7 +202,6 @@ public class DAO {
             preparedStatement.setString(6, departure);
             preparedStatement.setString(7, arrive);
             preparedStatement.executeUpdate();
-            printer.routeRegisteredSuccessfully(route_id, tuition, dni, origin, destination, departure, arrive);
         }
         this.disconnect();
     }
@@ -169,6 +214,18 @@ public class DAO {
             preparedStatement.setString(3, surname);
             preparedStatement.executeUpdate();
             printer.passengerCreated(name);
+        }
+        this.disconnect();
+    }
+
+    public void insertNewPassengerRoute(int route_id, String dni, int passengerRoute_id) throws SQLException {
+        this.connect();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_INTO_PASSENGERROUTES)) {
+            preparedStatement.setInt(1, route_id);
+            preparedStatement.setString(2, dni);
+            preparedStatement.setInt(3, passengerRoute_id);
+            preparedStatement.executeUpdate();
+            printer.thePassengerHasBeenAddedToRoute();
         }
         this.disconnect();
     }

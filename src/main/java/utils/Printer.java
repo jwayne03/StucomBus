@@ -31,17 +31,6 @@ public class Printer {
         System.out.println("You need to introduce an option");
     }
 
-    public void routeRegisteredSuccessfully(int route_id, String tuition, String dni, int origin, int destination, String departure, String arrive) {
-        System.out.println("New route registered successfully");
-        System.out.println("route id: " + route_id);
-        System.out.println("tuition: " + tuition);
-        System.out.println("DNI: " + dni);
-        System.out.println("origin: " + origin);
-        System.out.println("destination: " + destination);
-        System.out.println("departure: " + departure);
-        System.out.println("arrive: " + arrive);
-    }
-
     public void cantDeleteThisDriver() {
         System.out.println("You can't delete this driver because have a route assigned");
     }
@@ -88,5 +77,49 @@ public class Printer {
 
     public void passengerCreated(String name) {
         System.out.println(name + " has been created successfully");
+    }
+
+    public void createOrTakeRoute() {
+        System.out.println("1 - Create new passsenger");
+        System.out.println("2 - Assign new route to a passenger");
+    }
+
+    public void thePassengerHasBeenAddedToRoute() {
+        System.out.println("The passenger has been added successfully to route");
+    }
+
+    public void routeReserved(int id_route, String tuition, String driverDNI, int origin, int destiny, String departure, String arrive) {
+        System.out.println("The route has been registered successfully");
+        System.out.println("ID route: " + id_route);
+        System.out.println("Tuition: " + tuition);
+        System.out.println("Driver DNI: " + driverDNI);
+        originAndDestination(origin);
+
+        originAndDestination(destiny);
+        System.out.println("Departure: " + departure);
+        System.out.println("Arrive: " + arrive);
+    }
+
+    private void originAndDestination(int args) {
+        switch (args) {
+            case 1:
+                System.out.println("Origin: Madrid ");
+                break;
+            case 2:
+                System.out.println("Origin: Barcelona");
+                break;
+            case 3:
+                System.out.println("Origin: Valencia");
+                break;
+            case 4:
+                System.out.println("Origin: Sevilla");
+                break;
+            case 5:
+                System.out.println("Origin: Zaragoza");
+                break;
+            case 6:
+                System.out.println("Origin: Malaga");
+                break;
+        }
     }
 }

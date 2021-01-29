@@ -1,5 +1,10 @@
 package model;
 
+import worker.Worker;
+
+import java.sql.SQLException;
+import java.util.List;
+
 public class Driver {
 
     private String dni;

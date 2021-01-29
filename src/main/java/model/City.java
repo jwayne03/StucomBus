@@ -5,6 +5,10 @@ public class City {
     private int city_id;
     private String name;
 
+    public City() {
+
+    }
+
     public City(int city_id, String name) {
         this.city_id = city_id;
         this.name = name;
@@ -24,5 +28,10 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "city_id: " + city_id + " ----> " + "name: " + name;
     }
 }

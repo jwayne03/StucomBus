@@ -10,8 +10,12 @@ public class Route {
     private String departure;
     private String arrive;
 
-    public Route() {
+    private Driver driver;
+    private int passengerRoute_id;
+    private String passengerDNI;
 
+    public Route() {
+        this.driver = new Driver();
     }
 
     public Route(int route_id, String tuition, String dni, int origin, int destination, String departure, String arrive) {
@@ -22,6 +26,37 @@ public class Route {
         this.destination = destination;
         this.departure = departure;
         this.arrive = arrive;
+    }
+
+    public Route(int route_id, String passengerDNI, int passengerRoute_id) {
+        this.route_id = route_id;
+        this.passengerDNI = passengerDNI;
+        this.passengerRoute_id = passengerRoute_id;
+    }
+
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public int getPassengerRoute_id() {
+        return passengerRoute_id;
+    }
+
+    public void setPassengerRoute_id(int passengerRoute_id) {
+        this.passengerRoute_id = passengerRoute_id;
+    }
+
+    public String getPassengerDNI() {
+        return passengerDNI;
+    }
+
+    public void setPassengerDNI(String passengerDNI) {
+        this.passengerDNI = passengerDNI;
     }
 
     public int getRoute_id() {
@@ -88,6 +123,6 @@ public class Route {
                 " \norigin: " + origin +
                 " \ndestination: " + destination +
                 " \ndeparture: " + departure +
-                " \narrive: " + arrive  + "\n";
+                " \narrive: " + arrive + "\n";
     }
 }

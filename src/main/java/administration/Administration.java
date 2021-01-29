@@ -2,6 +2,7 @@ package administration;
 
 import dao.DAO;
 import model.Bus;
+import model.City;
 import model.Driver;
 import model.Route;
 import utils.Printer;
@@ -19,13 +20,13 @@ public class Administration {
     private Driver driver;
 
     public Administration() {
-        dao = new DAO();
-        printer = new Printer();
-        worker = new Worker();
-        driver = new Driver();
+        this.dao = new DAO();
+        this.printer = new Printer();
+        this.worker = new Worker();
+        this.driver = new Driver();
     }
 
-    public void run(List<Bus> buses, List<Driver> drivers, List<Route> routes) {
+    public void execute(List<City> cities, List<Bus> buses, List<Driver> drivers, List<Route> routes) {
         printer.administrationmenu();
 
         try {
@@ -43,7 +44,7 @@ public class Administration {
                     unsubscribeVehicle(buses);
                     break;
                 case 5:
-                    routeRegistration(routes);
+                    routeRegistration(cities, routes);
                     break;
                 case 6:
                     unsubscribeExistingRoute(routes);
@@ -56,11 +57,11 @@ public class Administration {
                     break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
-    private void driverRegistration(List<Driver> drivers) throws SQLException {
+    public void driverRegistration(List<Driver> drivers) throws SQLException {
         String dni = worker.askString("Introduce your DNI: ");
         String name = worker.askString("Introduce your name: ");
         String surname = worker.askString("Introduce your surname: ");
@@ -87,12 +88,13 @@ public class Administration {
         return false;
     }
 
-    private void unsubscribeDriver(List<Driver> drivers, List<Route> routes) throws SQLException {
+    public void unsubscribeDriver(List<Driver> drivers, List<Route> routes) throws SQLException {
         printAllDrivers(drivers);
         if (drivers.isEmpty()) {
             System.out.println("There are not drivers registered yet.");
             return;
         }
+
         String dni = worker.askString("What driver do you want to unsubscribe? \n " + "To delete you need to choose the dni");
         if (!checkDriverIfExist(dni, drivers)) {
             printer.thisDriverNoExists();
@@ -153,18 +155,29 @@ public class Administration {
         });
     }
 
-    private void routeRegistration(List<Route> routes) throws SQLException {
+    private void routeRegistration(List<City> cities, List<Route> routes) throws SQLException {
         System.out.println("Register a new Route: ");
         int id_route = worker.askInt("Introduce the id of your route");
         String tuition = worker.askString("Introduce the tuition of the vehicle");
         String driverDNI = worker.askString("Introduce the DNI of the driver");
         String departure = worker.askString("Introduce the date of departure");
         String arrive = worker.askString("Introduce the date of arrive");
+
+        cities.forEach(city -> {
+            System.out.println(city.toString());
+        });
+
         int origin = worker.askInt("Introduce your city origin");
         int destiny = worker.askInt("Introduce the city of destination");
 
+        if (origin <= 0 || origin >= 7 || destiny <= 0 || destiny >= 7) {
+            System.out.println("You need to introduce between 1 and 6");
+            return;
+        }
+
         routes.add(new Route(id_route, tuition, driverDNI, origin, destiny, departure, arrive));
         dao.insertNewRoute(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
+        printer.routeReserved(id_route, tuition,driverDNI,origin,destiny,departure,arrive);
     }
 
     private void unsubscribeExistingRoute(List<Route> routes) throws SQLException {
