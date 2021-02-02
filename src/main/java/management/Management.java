@@ -115,6 +115,15 @@ public class Management {
     }
 
     private void seePassengerRoute(List<Route> routes, List<Passenger> passengers) {
+//        for (Route route : routes) {
+//            for (Passenger passenger : passengers) {
+//                if (route.getDni() == pas)
+//
+//            }
+//        }
 
+        for (Passenger passenger: passengers) {
+            System.out.println(passenger.toString());
+        }
     }
 }

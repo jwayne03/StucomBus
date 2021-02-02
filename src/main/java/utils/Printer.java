@@ -93,14 +93,14 @@ public class Printer {
         System.out.println("ID route: " + id_route);
         System.out.println("Tuition: " + tuition);
         System.out.println("Driver DNI: " + driverDNI);
-        originAndDestination(origin);
+        origin(origin);
 
-        originAndDestination(destiny);
+        destination(destiny);
         System.out.println("Departure: " + departure);
         System.out.println("Arrive: " + arrive);
     }
 
-    private void originAndDestination(int args) {
+    private void origin(int args) {
         switch (args) {
             case 1:
                 System.out.println("Origin: Madrid ");
@@ -119,6 +119,29 @@ public class Printer {
                 break;
             case 6:
                 System.out.println("Origin: Malaga");
+                break;
+        }
+    }
+
+    private void destination(int args) {
+        switch (args) {
+            case 1:
+                System.out.println("Destiny: Madrid ");
+                break;
+            case 2:
+                System.out.println("Destiny: Barcelona");
+                break;
+            case 3:
+                System.out.println("Destiny: Valencia");
+                break;
+            case 4:
+                System.out.println("Destiny: Sevilla");
+                break;
+            case 5:
+                System.out.println("Destiny: Zaragoza");
+                break;
+            case 6:
+                System.out.println("Destiny: Malaga");
                 break;
         }
     }

@@ -1,9 +1,12 @@
 package dao;
 
 import exception.DatabaseException;
-import model.*;
+import model.Bus;
+import model.City;
+import model.Driver;
+import model.Passenger;
+import model.Route;
 import query.Query;
-import utils.DatabaseConnector;
 import utils.Printer;
 
 import java.sql.Connection;
@@ -15,7 +18,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DAO implements DatabaseConnector {
+public class DAO {
 
     private Connection connection;
     private Printer printer;
@@ -25,11 +28,10 @@ public class DAO implements DatabaseConnector {
             this.printer = new Printer();
             this.connect();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
-    @Override
     public void connect() throws DatabaseException {
         try {
             String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
@@ -41,10 +43,9 @@ public class DAO implements DatabaseConnector {
         }
     }
 
-    @Override
     public void disconnect() {
         try {
-            if (connection != null) connection.close();
+            if (this.connection != null) this.connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -221,9 +222,9 @@ public class DAO implements DatabaseConnector {
     public void insertNewPassengerRoute(int route_id, String dni, int passengerRoute_id) throws SQLException {
         this.connect();
         try (PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_INTO_PASSENGERROUTES)) {
-            preparedStatement.setInt(1, route_id);
-            preparedStatement.setString(2, dni);
-            preparedStatement.setInt(3, passengerRoute_id);
+            preparedStatement.setInt(1, passengerRoute_id);
+            preparedStatement.setInt(2, route_id);
+            preparedStatement.setString(3, dni);
             preparedStatement.executeUpdate();
             printer.thePassengerHasBeenAddedToRoute();
         }
