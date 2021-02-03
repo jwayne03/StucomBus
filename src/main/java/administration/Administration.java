@@ -207,6 +207,7 @@ public class Administration {
     }
 
     private void showListRoutes(List<Route> routes) {
+        if (routes.isEmpty()) System.out.println("There are not routes");
         routes.forEach(route -> {
             System.out.println(route.toString());
         });

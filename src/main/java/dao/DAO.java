@@ -34,12 +34,12 @@ public class DAO {
 
     public void connect() throws DatabaseException {
         try {
-            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false";
+            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false&serverTimezone=UTC";
             String USER = "root";
-            String PASSWORD = "Epsa2014!";
+            String PASSWORD = "root";
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            throw new DatabaseException("DATABASE ERROR CONECTION");
+            e.printStackTrace();
         }
     }
 
