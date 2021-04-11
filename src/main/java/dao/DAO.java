@@ -34,7 +34,7 @@ public class DAO {
 
     public void connect() throws DatabaseException {
         try {
-            String URL = "jdbc:mysql://localhost:3306/stucombus?useSSL=false&serverTimezone=UTC";
+            String URL = "jdbc:mysql://0.0.0.0:6033/stucombus?useSSL=false";
             String USER = "root";
             String PASSWORD = "root";
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -163,6 +163,8 @@ public class DAO {
         return cities;
     }
 
+
+
     // ******************* INSERTS *******************
 
     public void insertNewDriver(String dni, String name, String surname) throws SQLException {
@@ -219,6 +221,17 @@ public class DAO {
         this.disconnect();
     }
 
+    public void insertNewCity(int id, String cityName) throws SQLException {
+        this.connect();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_CITY)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, cityName);
+            preparedStatement.executeUpdate();
+            System.out.println("The city has been added successfully");
+        }
+        this.disconnect();
+    }
+
     public void insertNewPassengerRoute(int route_id, String dni, int passengerRoute_id) throws SQLException {
         this.connect();
         try (PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_INTO_PASSENGERROUTES)) {
@@ -255,7 +268,19 @@ public class DAO {
         this.connect();
         try (PreparedStatement preparedStatement = connection.prepareStatement(Query.DELETE_ROUTE_IDROUTE)) {
             preparedStatement.setInt(1, route_id);
+            preparedStatement.executeUpdate();
         }
         this.disconnect();
     }
+
+    public void deleteExistentCity(int city_id) throws SQLException {
+        this.connect();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(Query.DELETE_CITY)) {
+            preparedStatement.setInt(1 , city_id);
+            preparedStatement.executeUpdate();
+        }
+        this.disconnect();
+    }
+
+
 }

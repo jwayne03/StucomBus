@@ -18,6 +18,11 @@ public class Printer {
         System.out.println("5 - Register a new route");
         System.out.println("6 - Unsubscribe an existing route");
         System.out.println("7 - Show list of routes");
+        System.out.println("---------- EXAM ----------");
+        System.out.println("8 - Show buses assosiated drivers");
+        System.out.println("9 - Add new city");
+        System.out.println("10 - Unsubscribe a city existent");
+        System.out.println("11 - Show city list");
     }
 
     public void managementmenu() {

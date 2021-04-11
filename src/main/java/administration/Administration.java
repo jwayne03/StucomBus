@@ -1,6 +1,7 @@
 package administration;
 
 import dao.DAO;
+import exception.DatabaseException;
 import model.Bus;
 import model.City;
 import model.Driver;
@@ -8,6 +9,7 @@ import model.Route;
 import utils.Printer;
 import worker.Worker;
 
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -51,6 +53,18 @@ public class Administration {
                     break;
                 case 7:
                     showListRoutes(routes);
+                    break;
+                case 8:
+                    showBusesAssosiatedDrivers(drivers, buses, routes);
+                    break;
+                case 9:
+                    addNewCity(cities);
+                    break;
+                case 10:
+                    unsubscribeExistentCity(cities);
+                    break;
+                case 11:
+                    showCityList(cities);
                     break;
                 default:
                     printer.needToIntroduceAnOption();
@@ -177,7 +191,7 @@ public class Administration {
 
         routes.add(new Route(id_route, tuition, driverDNI, origin, destiny, departure, arrive));
         dao.insertNewRoute(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
-        printer.routeReserved(id_route, tuition,driverDNI,origin,destiny,departure,arrive);
+        printer.routeReserved(id_route, tuition, driverDNI, origin, destiny, departure, arrive);
     }
 
     private void unsubscribeExistingRoute(List<Route> routes) throws SQLException {
@@ -211,5 +225,94 @@ public class Administration {
         routes.forEach(route -> {
             System.out.println(route.toString());
         });
+    }
+
+    private void showBusesAssosiatedDrivers(List<Driver> drivers, List<Bus> buses, List<Route> routes) throws DatabaseException {
+        int counter = 1;
+
+        for (Driver driver : drivers) {
+            System.out.println(counter + " - " + driver.toString());
+            counter++;
+        }
+
+        int driver_id = worker.askInt("Introduce the number what do you want to consult: ");
+
+        for (Driver driver : drivers) {
+            if (drivers.get(driver_id - 1).getDni().equals(driver.getDni())) {
+                for (Route route : routes) {
+                    if (route.getDriver().equals(driver.getDni())) {
+                        for (Bus bus : buses) {
+                            System.out.println(bus.toString());
+                            return;
+                        }
+                    } else {
+                        throw new DatabaseException("This driver don't have buses associated");
+                    }
+                }
+            } else {
+                throw new DatabaseException("This driver doens't exist");
+            }
+        }
+    }
+
+    private void addNewCity(List<City> cities) throws SQLException {
+        String cityName = worker.askString("Introduce the name of the city do you want to register: ");
+
+        if (this.checkIfThisCityExist(cities, cityName)) {
+            System.out.println("You can't introduce the name city, try again.");
+            return;
+        } else {
+            cities.add(new City(cities.size() + 2, cityName));
+            this.dao.insertNewCity(cities.size() + 1, cityName);
+            return;
+        }
+    }
+
+    private boolean checkIfThisCityExist(List<City> cities, String cityName) {
+        for (City city : cities) {
+            if (cityName.equalsIgnoreCase(city.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void unsubscribeExistentCity(List<City> cities) throws SQLException {
+        this.showCities(cities);
+        System.out.println("(Introduce the ID of the city do you want to delete)");
+        int city_id = worker.askInt("What city do you want to delete?");
+
+        if (this.checkCityExist(cities, city_id)) {
+            for (City city : cities) {
+                if (city_id == city.getCity_id()) {
+                    this.dao.deleteExistentCity(city_id);
+                    break;
+                }
+            }
+        } else {
+            System.out.println("This city doesn't exist");
+            return;
+        }
+    }
+
+    private boolean checkCityExist(List<City> cities, int city_id) {
+        for (City city : cities) {
+            if (city_id == city.getCity_id()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void showCities(List<City> cities) {
+        for (City city : cities) {
+            System.out.println(city.toString());
+        }
+    }
+
+    private void showCityList(List<City> cities) {
+        for (City city : cities) {
+            System.out.println(city.toString());
+        }
     }
 }
